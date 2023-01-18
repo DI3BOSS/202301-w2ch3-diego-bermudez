@@ -312,9 +312,7 @@ const questionPacks = [
   },
 ];
 
-const questionPackSelector = () => {
-  return Math.round(Math.random() * 2);
-};
+const questionPackSelector = () => Math.round(Math.random() * 2);
 
 const commentsToGuessedAnswers = (random) => {
   const answers = [
@@ -354,9 +352,7 @@ const commentsToPassedAnswers = (random, id) => {
   return answers[random];
 };
 
-const commentSelector = () => {
-  return Math.round(Math.random() * 5);
-};
+const commentSelector = () => Math.round(Math.random() * 5);
 
 const playerData = {};
 playerData.questionsIdForGame = questionPackSelector();
@@ -365,9 +361,8 @@ playerData.MaximumHealth = 100;
 playerData.health = playerData.MaximumHealth;
 playerData.money = 0;
 
-const moneyChanceForGuessed = () => {
-  return Math.round(Math.random() * (500000 / gameTime));
-};
+const moneyChanceForGuessed = () =>
+  Math.round(Math.random() * (500000 / gameTime));
 
 let guessedCheck = [];
 let passedCheck = [];
@@ -400,7 +395,7 @@ const ranking = () => {
     guessed: playerData.points,
     moneyEarned: playerData.money,
   }),
-    pointsRanking.sort((a, b) => b["moneyEarned"] - a["moneyEarned"]);
+    pointsRanking.sort((a, b) => b.moneyEarned - a.moneyEarned);
 
   const ranking = document.getElementById("game-ranking");
   ranking.innerHTML +=
@@ -470,18 +465,12 @@ const donutMaker = () => {
     Math.sin(letterAngle(angle) * (Math.PI / 180)) * donutRadius;
   // Y = √ R² - X² (de despejar la Y en la ecuación canónica de la circumferencia -> X² + Y² = R²)
   const yAxisPosition = (angle) => {
-    //equivalente a <90 *-1, <180 y <270 *1 y <360*-1, para distribuir las letras en los cuatro cuadrantes del plano cartesiano.
+    // Equivalente a <90 *-1, <180 y <270 *1 y <360*-1, para distribuir las letras en los cuatro cuadrantes del plano cartesiano.
     if (letterAngle(angle) < 90 || letterAngle(angle) > 270) {
-      return (
-        Math.sqrt(
-          Math.pow(donutRadius, 2) - Math.pow(xAxisPosition(angle), 2)
-        ) * -1
-      );
-    } else {
-      return Math.sqrt(
-        Math.pow(donutRadius, 2) - Math.pow(xAxisPosition(angle), 2)
-      );
+      return Math.sqrt(donutRadius ** 2 - xAxisPosition(angle) ** 2) * -1;
     }
+
+    return Math.sqrt(donutRadius ** 2 - xAxisPosition(angle) ** 2);
   };
 
   const donutPlace = document.getElementById("letter-donut");
@@ -551,7 +540,7 @@ const runGameAfterExplanation = () => {
 
       pukkaName.className = "pukka-name";
       pukkaName.innerHTML +=
-        playerName.value === 0 || playerName.value * 1 + 1 > 1
+        playerName.value === 0 || Number(playerName.value) + 1 > 1
           ? "<p> No pienso llamarte con un número. ¡Esto no es un puto equipo de fútbol! Déjate V o <b> ponte un apodo de verdad</b>...</p>"
           : "<p> ¿Te llamo silbando? entonces ¡¿qué es esa mierda de dejar el nombre vacío?! Déjate V o <b>ponte un nombre como Dios manda</b>...</p>";
       playerName.className = "pukka-player-name";
@@ -614,6 +603,7 @@ const startGame = (counterId) => {
       if (!roundNumberCounter) {
         donutMaker();
       }
+
       questionZone(counterId);
       playerInputs(counterId);
 
@@ -648,7 +638,7 @@ const questionZone = (id) => {
     '<span class="questions-zone">' +
     '<p class="daemon-terminal">../device.root:/daemon=happyHour&breakingIce</p>' +
     '<p id="current-question">' +
-    questionPacks[id]["question"][playerData.questionsIdForGame] +
+    questionPacks[id].question[playerData.questionsIdForGame] +
     "</p>" +
     "</div>";
 };
@@ -950,6 +940,7 @@ const otherRoundMenu = () => {
       }
     });
   };
+
   passedQuestionFinder();
   startGame(passedPositionIndexer[passedPositionIndex]);
 };
@@ -1166,12 +1157,10 @@ const answerInputResetAndWinnerChecker = (delay) => {
       } else {
         questionZoneReset(questionIdCounter);
       }
+    } else if (passedPositionIndex === passedPositionIndexer.length) {
+      winnerChecker();
     } else {
-      if (passedPositionIndex === passedPositionIndexer.length) {
-        winnerChecker();
-      } else {
-        questionZoneReset(passedPositionIndexer[passedPositionIndex]);
-      }
+      questionZoneReset(passedPositionIndexer[passedPositionIndex]);
     }
   }, delay);
 };
